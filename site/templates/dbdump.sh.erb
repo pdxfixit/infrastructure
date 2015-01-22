@@ -1,0 +1,7 @@
+#!/bin/bash
+<% @databases.each do |database, setting| -%>
+NOW="$(date +%Y%m%d%H%I%S)"
+FILE="<%= database %>.${NOW}.sql"
+mysqldump --single-transaction -h <%= setting["host"] %> -u <%= setting["user"] %> -p'<%= setting["password"] %>' <%= database %> > ~/${FILE}
+gzip -f --rsyncable -q ~/${FILE}
+<% end -%>

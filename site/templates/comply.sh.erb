@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ -z "$1" ] ; then
+  echo "No folder provided."
+  echo "Usage: $0 <folder>"
+  exit 1
+fi
+
+echo "Setting ownership for $1..."
+chown -R www-data:www-data $1
+
+echo "Setting permissions on directories..."
+find $1 -type d -perm -775 -exec chmod 775 {} \;
+
+echo "Setting permissions on files..."
+find $1 -type f -perm -664 -exec chmod 664 {} \;
+
+echo "Done!"

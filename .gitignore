@@ -1,0 +1,8 @@
+.idea
+.project
+.vagrant
+defaults.yaml
+node/*
+spec/fixtures
+web/*
+!web/index.php

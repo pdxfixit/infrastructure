@@ -1,0 +1,40 @@
+---
+ntp::restrict:
+  - 127.0.0.1
+ntp::enable: true
+ntp::servers:
+  - 0.north-america.pool.ntp.org iburst
+  - 0.centos.pool.ntp.org iburst
+  - time.nist.gov iburst
+  - nist1-la.ustiming.org iburst
+
+users_basic:
+  www-data:
+    ensure: present
+    shell: /bin/bash
+    home: /var/www
+    managehome: true
+    groups: www-data
+
+apache::mod::prefork::startservers: 3
+apache::mod::prefork::minspareservers: 2
+apache::mod::prefork::maxspareservers: 5
+apache::mod::prefork::serverlimit: 24
+apache::mod::prefork::maxclients: 24
+apache::mod::prefork::maxrequestsperchild: 500
+
+site::roles::webserver::vhosts:
+  pdxfixit_web_http:
+    synced_folder: "/www/pdxfixit"
+    default_vhost: true
+    servername: pdxfixit.com
+    port: "80"
+    docroot: "/var/www/pdxfixit.com/www"
+    docroot_owner: www-data
+    docroot_group: www-data
+    serveraliases:
+      - www.pdxfixit.com
+    options:
+      - FollowSymLinks
+      - MultiViews
+    override: "All"
