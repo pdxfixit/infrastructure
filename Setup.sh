@@ -4,6 +4,11 @@
 
 if [ ! -d "/vagrant" ] ; then
   hostname "server.pdxfixit.com"
+  while read l; do
+    if [[ "$l" =~ "docroot:" ]] ; then
+      mkdir -p ${l/#docroot: }
+    fi
+  done < node/server.pdxfixit.com.yaml
 else
   hostname "dev.pdxfixit.com"
 fi
