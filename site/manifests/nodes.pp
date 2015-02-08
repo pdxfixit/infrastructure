@@ -3,7 +3,9 @@ node 'www', default {
   class { '::site::roles::mysql::server': }
   class { '::site::roles::webserver': }
   class { '::site::roles::webserver::security': }
-  class { '::site::roles::mailcatcher': }
+  if $environment == 'dev' {
+    class { '::site::roles::mailcatcher': }
+  }
 }
 
 node 'db', 'dbserver', /^db\d+$/ {
