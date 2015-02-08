@@ -4,6 +4,7 @@
 
 if [ ! -d "/vagrant" ] ; then
   hostname "server.pdxfixit.com"
+  # ensure vhost folders are created
   while read l; do
     if [[ "$l" =~ "docroot:" ]] ; then
       mkdir -p ${l/#docroot: }
