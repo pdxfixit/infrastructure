@@ -3,6 +3,7 @@
 class site::roles::base (
   $timezone = 'America/Los_Angeles',
   ) {
+
   anchor { '::site::roles::base': }
 
   Class {
@@ -15,6 +16,14 @@ class site::roles::base (
   class { '::site::base::packages': }
   class { '::site::roles::firewall': }
   class { '::ntp': }
-  class { 'timezone': timezone => $timezone }
+  class { 'timezone':
+    timezone => $timezone
+  }
+
+  # Munin
+  class { 'munin':
+    monitor      => true,
+    monitor_tool => [ 'munin' ],
+  }
 
 }
