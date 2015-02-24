@@ -5,6 +5,7 @@ node 'www', default {
   class { '::site::roles::webserver::security': }
   if $environment == 'dev' {
     class { '::site::roles::mailcatcher': }
+    class { '::site::roles::webserver::xdebug': }
   }
 }
 
