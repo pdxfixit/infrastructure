@@ -63,6 +63,24 @@ class site::roles::mysql::server (
     },
   }
 
+  # Allow development access
+  if $environment == 'dev' {
+    mysql_user { 'root@192.168.47.1':
+      ensure        => 'present',
+      password_hash => mysql_password('password'),
+      require       => Class['::mysql::server'],
+    }
+
+    mysql_grant { 'root@192.168.47.1/*.*':
+      ensure     => 'present',
+      options    => ['GRANT'],
+      privileges => ['ALL'],
+      require    => Mysql_user['root@192.168.47.1'],
+      table      => '*.*',
+      user       => 'root@192.168.47.1',
+    }
+  }
+
   # This is the equivalent of running mysql_secure_installation
   class { '::mysql::server::account_security':
     require => Class['::mysql::server'],
