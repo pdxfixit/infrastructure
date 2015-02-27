@@ -4,6 +4,7 @@
 
 if [ ! -d "/vagrant" ] ; then
   hostname "server.pdxfixit.com"
+  ENV="production"
   # ensure vhost folders are created
   while read l; do
     if [[ "$l" =~ "docroot:" ]] ; then
@@ -12,6 +13,7 @@ if [ ! -d "/vagrant" ] ; then
   done < node/server.pdxfixit.com.yaml
 else
   hostname "dev.pdxfixit.com"
+  ENV="dev"
 fi
 
 echo "Installing packages..."
@@ -45,11 +47,11 @@ for count in {1..30}; do
   apt-get install -y -qq puppet
 done
 
-mkdir -p /etc/puppet/environments/production/modules
+mkdir -p /etc/puppet/environments/${ENV}/modules
 
 # r10k installs puppet modules
-puppet apply -e "class {'site::base::r10k': dir => '/etc/puppet/environments/production'}" --modulepath=/root/pdxfixit-infra
-puppet apply -e "class {'site::base::puppetconf': environment => 'production'}" --modulepath="/root/pdxfixit-infra:/etc/puppet/environments/production/modules"
+puppet apply -e "class {'site::base::r10k': dir => '/etc/puppet/environments/${ENV}'}" --modulepath=/root/pdxfixit-infra
+puppet apply -e "class {'site::base::puppetconf': environment => '${ENV}'}" --modulepath="/root/pdxfixit-infra:/etc/puppet/environments/${ENV}/modules"
 
 # configure hiera via puppet and then run puppet apply
 echo "Running Puppet..."
