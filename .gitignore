@@ -1,7 +1,6 @@
 .idea
 .project
 .vagrant
-databases/*
 defaults.yaml
 node/*
 !node/example.pdxfixit.com.yaml

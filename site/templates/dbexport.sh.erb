@@ -1,10 +1,10 @@
 #!/bin/bash
 # Export all databases
 
-if [ ! -d /vagrant/databases/ ] ; then
-  mkdir -p /vagrant/databases/
+if [ ! -d /var/db/ ] ; then
+  mkdir -p /var/db/
 fi
-cd /vagrant/databases/
+cd /var/db/
 <% @databases.each do |database, setting| -%>
 
 # <%= database %>

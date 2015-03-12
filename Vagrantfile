@@ -74,6 +74,7 @@ Vagrant.configure("2") do |config|
 
     node.vm.synced_folder ".", "/root/pdxfixit-infra"
     node.vm.synced_folder ".", "/vagrant"
+    node.vm.synced_folder "/databases", "/var/db"
 
     # web folders need explicit permissions here; the other synced folders can safely default to root ownership
     FOLDERS.each do |name, folders|
