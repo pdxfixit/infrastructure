@@ -5,5 +5,3 @@ defaults.yaml
 node/*
 !node/example.pdxfixit.com.yaml
 spec/fixtures
-web/*
-!web/index.php
