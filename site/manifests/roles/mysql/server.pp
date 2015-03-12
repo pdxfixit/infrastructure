@@ -1,29 +1,30 @@
-# Set up a mysql server
+# Set up a mysql server instance
 class site::roles::mysql::server (
-  $databases = hiera('databases'),
   $buffer_pool_size = '128M',
+  $databases        = hiera('databases'),
   $query_cache_size = '64M',
+  $root_pwd         = hiera('mysql::server::root_password', 'password'),
   $tmp_table_size   = '64M',
 ) {
 
   class { '::mysql::client':
-    package_ensure   => 'installed',
+    package_ensure => 'installed',
   }
 
-#  file { 'db.sh':
-#    path    => '/root/db.sh',
-#    owner   => 'root',
-#    group   => 'root',
-#    mode    => '0775',
-#    content => template('site/db.sh.erb'),
-#  }
-
-  file { 'dbdump.sh':
-    path    => '/root/dbdump.sh',
+  file { 'dbimport.sh':
+    path    => '/root/dbimport.sh',
     owner   => 'root',
     group   => 'root',
-    mode    => '0775',
-    content => template('site/dbdump.sh.erb'),
+    mode    => '0770',
+    content => template('site/dbimport.sh.erb'),
+  }
+
+  file { 'dbexport.sh':
+    path    => '/root/dbexport.sh',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0770',
+    content => template('site/dbexport.sh.erb'),
   }
 
   firewall { '101 allow mysql inbound':
@@ -67,7 +68,7 @@ class site::roles::mysql::server (
   if $environment == 'dev' {
     mysql_user { 'root@192.168.47.1':
       ensure        => 'present',
-      password_hash => mysql_password('password'),
+      password_hash => mysql_password($root_pwd),
       require       => Class['::mysql::server'],
     }
 

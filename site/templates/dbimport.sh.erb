@@ -1,0 +1,18 @@
+#!/bin/bash
+# Import all available databases
+
+if [ ! -d /vagrant/databases/ ] ; then
+  exit 1
+fi
+cd /vagrant/databases/
+<% @databases.each do |database, setting| -%>
+
+# <%= database %>
+if ls <%= database %>.*.sql 1> /dev/null 2>&1; then
+  FILE=$(ls <%= database %>.*.sql | tail -n 1)
+  echo "Importing $FILE into <%= database %>..."
+  mysql -h <%= setting["host"] %> -u <%= setting["user"] %> -p'<%= setting["password"] %>' -D <%= database %> --execute="SOURCE /vagrant/databases/${FILE}"
+else
+  echo "No database found for <%= database %>."
+fi
+<% end -%>

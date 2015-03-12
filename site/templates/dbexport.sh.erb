@@ -1,0 +1,14 @@
+#!/bin/bash
+# Export all databases
+
+if [ ! -d /vagrant/databases/ ] ; then
+  mkdir -p /vagrant/databases/
+fi
+cd /vagrant/databases/
+<% @databases.each do |database, setting| -%>
+
+# <%= database %>
+FILE="<%= database %>.$(date +%Y%m%d%H%I%S).sql"
+echo "Exporting <%= database %> to $FILE..."
+mysqldump --single-transaction -h <%= setting["host"] %> -u <%= setting["user"] %> -p'<%= setting["password"] %>' <%= database %> > ${FILE}
+<% end -%>
