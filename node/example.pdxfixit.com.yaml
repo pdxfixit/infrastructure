@@ -1,0 +1,81 @@
+---
+users_basic:
+  www-data:
+    ensure: present
+    shell: /bin/bash
+    home: /var/www
+    managehome: true
+    groups: www-data
+    ssh_authorized_keys:
+      user_site_key:
+        type: 'ssh-rsa'
+        key:  ''
+  root:
+    ensure: present
+    shell: /bin/bash
+    home: /root
+    ssh_authorized_keys:
+      user_root_key:
+        type: 'ssh-rsa'
+        key:  ''
+
+mysql::server::root_password: 'password'
+
+databases:
+  first_db:
+    user: 'first_user'
+    password: 'password'
+    host: 'localhost'
+    grant:
+      - 'ALL'
+      - 'SUPER'
+  second_db:
+    user: 'second_user'
+    password: 'password'
+    host: 'localhost'
+    grant:
+      - 'ALL'
+      - 'SUPER'
+
+synced_folders:
+  first:
+    host: "/www/first"
+    guest: "/var/www/first.pdxfixit.com/www"
+  second:
+    host: "/www/second"
+    guest: "/var/www/second.pdxfixit.com/www"
+
+php:
+  display_errors: 'On'
+  error_reporting: 'E_ALL & ~E_NOTICE'
+  sendmail_path: '/usr/bin/env /usr/local/bin/catchmail -f catchmail@pdxfixit.com'
+  smtp_host: 'localhost'
+  smtp_port: '1025'
+  use_apc: true
+
+site::roles::webserver::vhosts:
+  first_web_http:
+    default_vhost: true
+    servername: first.pdxfixit.com
+    port: "80"
+    docroot: "/var/www/first.pdxfixit.com/www"
+    docroot_owner: www-data
+    docroot_group: www-data
+    serveraliases:
+      - www.first.pdxfixit.com
+    options:
+      - FollowSymLinks
+      - MultiViews
+    override: "All"
+  second_web_http:
+    servername: second.pdxfixit.com
+    port: "80"
+    docroot: "/var/www/second.pdxfixit.com/www"
+    docroot_owner: www-data
+    docroot_group: www-data
+    serveraliases:
+      - www.second.pdxfixit.com
+    options:
+      - FollowSymLinks
+      - MultiViews
+    override: "All"
