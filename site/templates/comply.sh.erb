@@ -10,9 +10,9 @@ echo "Setting ownership for $1..."
 chown -R www-data:www-data $1
 
 echo "Setting permissions on directories..."
-find $1 -type d -perm -775 -exec chmod 775 {} \;
+find $1 -type d -exec chmod 755 {} \;
 
 echo "Setting permissions on files..."
-find $1 -type f -perm -664 -exec chmod 664 {} \;
+find $1 -type f -exec chmod 644 {} \;
 
 echo "Done!"
