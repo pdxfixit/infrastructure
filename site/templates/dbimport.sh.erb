@@ -6,14 +6,33 @@ if [ ! -d /var/db/ ] ; then
   exit 1
 fi
 cd /var/db/
+
+import() { # 1=host, 2=user, 3=password, 4=database
+  if [ -z "$2" ] || [ -z "$4" ] ; then
+    return
+  fi
+
+  HOST="$1"
+  USER="$2"
+  PASS="$3"
+  DB="$4"
+
+  if ls ${DB}.*.sql 1> /dev/null 2>&1; then
+    FILE=$(ls ${DB}.*.sql | tail -n 1)
+    echo "Importing ${FILE} into ${DB}..."
+    mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE}"
+
+    # TODO: Check for a 'localization' file. If exists, execute.
+  else
+    echo "No file found for ${DB}."
+  fi
+}
 <% @databases.each do |database, setting| -%>
 
 # <%= database %>
-if ls <%= database %>.*.sql 1> /dev/null 2>&1; then
-  FILE=$(ls <%= database %>.*.sql | tail -n 1)
-  echo "Importing $FILE into <%= database %>..."
-  mysql -h <%= setting["host"] %> -u <%= setting["user"] %> -p'<%= setting["password"] %>' -D <%= database %> --execute="SOURCE ${FILE}"
+if [ ! -z "$1" ] && [ "$1" != "<%= database %>" ] ; then
+  : # if a command-line argument has been provided, and it's not this database, skip
 else
-  echo "No database found for <%= database %>."
+  import <%= setting["host"] %> <%= setting["user"] %> <%= setting["password"] %> <%= database %>
 fi
 <% end -%>
