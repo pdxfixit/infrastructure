@@ -51,6 +51,7 @@ class site::roles::webserver (
     action => accept,
   }
 
+  include apache::mod::autoindex
   include apache::mod::deflate
   include apache::mod::rewrite
   include apache::mod::ssl
