@@ -38,13 +38,13 @@ Vagrant.configure("2") do |config|
 
   if Vagrant.has_plugin?('vagrant-triggers')
     # Restore databases
-    config.trigger.after [:resume, :up], :option => "value" do
+    config.trigger.after [:reload, :resume, :up], :option => "value" do
       info "Restoring databases..."
       run_remote "/root/dbimport.sh"
     end
 
     # Export databases
-    config.trigger.before [:destroy, :halt, :suspend], :option => "value" do
+    config.trigger.before [:destroy, :halt, :reload, :suspend], :option => "value" do
       info "Exporting databases..."
       run_remote "/root/dbexport.sh"
     end
