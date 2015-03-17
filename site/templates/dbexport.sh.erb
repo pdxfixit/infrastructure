@@ -5,10 +5,40 @@ if [ ! -d /var/db/ ] ; then
   mkdir -p /var/db/
 fi
 cd /var/db/
+
+export() { # 1=host, 2=user, 3=password, 4=database
+  if [ -z "$2" ] || [ -z "$4" ] ; then
+    return
+  fi
+
+  HOST="$1"
+  USER="$2"
+  PASS="$3"
+  DB="$4"
+
+  # Check for an older file; store it for later
+  if ls ${DB}.*.sql 1> /dev/null 2>&1; then
+    OLDFILE=$(ls ${DB}.*.sql | tail -n 1)
+  fi
+
+  # Export the current database
+  FILE="${DB}.$(date +%Y%m%d%H%I%S).sql"
+  echo -n "Exporting ${DB}..."
+  mysqldump --single-transaction -h ${HOST} -u ${USER} -p"${PASS}" ${DB} > ${FILE}
+
+  # Check the current database against the older file; if they've the same content, chuck the new one.
+  head -n -1 ${OLDFILE} > ${OLDFILE}.cmp
+  head -n -1 ${FILE} > ${FILE}.cmp # Strip off the last line; it's got a timestamp (and so would always be diff)
+  cmp -s ${OLDFILE}.cmp ${FILE}.cmp && rm ${FILE} | echo " No changes."
+  rm -f ${OLDFILE}.cmp ${FILE}.cmp # gold star for cleanliness
+}
+
 <% @databases.each do |database, setting| -%>
 
 # <%= database %>
-FILE="<%= database %>.$(date +%Y%m%d%H%I%S).sql"
-echo "Exporting <%= database %> to $FILE..."
-mysqldump --single-transaction -h <%= setting["host"] %> -u <%= setting["user"] %> -p'<%= setting["password"] %>' <%= database %> > ${FILE}
+if [ ! -z "$1" ] && [ "$1" != "<%= database %>" ] ; then
+  : # if a command-line argument has been provided, and it's not this database, skip
+else
+  export <%= setting["host"] %> <%= setting["user"] %> <%= setting["password"] %> <%= database %>
+fi
 <% end -%>
