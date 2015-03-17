@@ -23,13 +23,13 @@ export() { # 1=host, 2=user, 3=password, 4=database
 
   # Export the current database
   FILE="${DB}.$(date +%Y%m%d%H%I%S).sql"
-  echo -n "Exporting ${DB}..."
+  echo -n "Checking ${DB}..."
   mysqldump --single-transaction -h ${HOST} -u ${USER} -p"${PASS}" ${DB} > ${FILE}
 
   # Check the current database against the older file; if they've the same content, chuck the new one.
   head -n -1 ${OLDFILE} > ${OLDFILE}.cmp
   head -n -1 ${FILE} > ${FILE}.cmp # Strip off the last line; it's got a timestamp (and so would always be diff)
-  cmp -s ${OLDFILE}.cmp ${FILE}.cmp && rm ${FILE} | echo " No changes."
+  cmp -s ${OLDFILE}.cmp ${FILE}.cmp && rm ${FILE} || echo -n "Exported ${DB} to ${FILE}."
   rm -f ${OLDFILE}.cmp ${FILE}.cmp # gold star for cleanliness
 }
 
