@@ -66,6 +66,15 @@ class site::roles::webserver::security (
     require => Package['libapache2-modsecurity'],
   }
 
+  # unicode.mapping
+  file { 'unicode.mapping':
+    content => template('site/unicode.mapping.erb'),
+    ensure  => 'file',
+    notify  => Service['httpd'],
+    path    => '/etc/modsecurity/unicode.mapping',
+    require => Package['libapache2-modsecurity'],
+  }
+
   apache_modsecurity_base_rules { $base_rules: }
   apache_modsecurity_optional_rules { $optional_rules: }
   apache_modsecurity_experimental_rules { $experimental_rules: }
