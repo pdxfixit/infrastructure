@@ -26,6 +26,14 @@ SecRule REQUEST_HEADERS:Content-Type "text/xml" \
      "id:'200000',phase:1,t:none,t:lowercase,pass,nolog,ctl:requestBodyProcessor=XML"
 <% end -%>
 
+# Enable JSON request body parser.
+# Initiate JSON Processor in case of JSON content-type; change accordingly
+# if your application does not use 'application/json'
+#
+<% if @apache_version == "2.4" -%>
+SecRule REQUEST_HEADERS:Content-Type "application/json" \
+     "id:'200001',phase:1,t:none,t:lowercase,pass,nolog,ctl:requestBodyProcessor=JSON"
+<% end -%>
 
 # Maximum request body size we will accept for buffering. If you support
 # file uploads then the value given on the first line has to be as large
@@ -62,7 +70,7 @@ SecRule REQBODY_ERROR "!@eq 0" \
 <% if @apache_version == "2.2" -%>
 "phase:2,t:none,log,deny,status:400,msg:'Failed to parse request body.',logdata:'%{reqbody_error_msg}',severity:2"
 <% elsif @apache_version == "2.4" -%>
-"id:'200001', phase:2,t:none,log,deny,status:400,msg:'Failed to parse request body.',logdata:'%{reqbody_error_msg}',severity:2"
+"id:'200002', phase:2,t:none,log,deny,status:400,msg:'Failed to parse request body.',logdata:'%{reqbody_error_msg}',severity:2"
 <% end -%>
 
 # By default be strict with what we accept in the multipart/form-data
@@ -75,7 +83,7 @@ SecRule MULTIPART_STRICT_ERROR "!@eq 0" \
 "phase:2,t:none,log,deny,status:44,msg:'Multipart request body \
 failed strict validation: \
 <% elsif @apache_version == "2.4" -%>
-"id:'200002',phase:2,t:none,log,deny,status:44, \
+"id:'200003',phase:2,t:none,log,deny,status:400, \
 msg:'Multipart request body failed strict validation: \
 <% end -%>
 PE %{REQBODY_PROCESSOR_ERROR}, \
@@ -107,7 +115,7 @@ SecRule MULTIPART_UNMATCHED_BOUNDARY "!@eq 0" \
 <% if @apache_version == "2.2" -%>
 "phase:2,t:none,log,deny,status:44,msg:'Multipart parser detected a possible unmatched boundary.'"
 <% elsif @apache_version == "2.4" -%>
-"id:'200003',phase:2,t:none,log,deny,msg:'Multipart parser detected a possible unmatched boundary.'"
+"id:'200004',phase:2,t:none,log,deny,msg:'Multipart parser detected a possible unmatched boundary.'"
 <% end -%>
 
 # PCRE Tuning
@@ -125,7 +133,7 @@ SecRule TX:/^MSC_/ "!@streq 0" \
 <% if @apache_version == "2.2" -%>
         "phase:2,t:none,deny,msg:'ModSecurity internal error flagged: %{MATCHED_VAR_NAME}'"
 <% elsif @apache_version == "2.4" -%>
-        "id:'200004',phase:2,t:none,deny,msg:'ModSecurity internal error flagged: %{MATCHED_VAR_NAME}'"
+        "id:'200005',phase:2,t:none,deny,msg:'ModSecurity internal error flagged: %{MATCHED_VAR_NAME}'"
 <% end -%>
 
 
@@ -247,3 +255,10 @@ SecCookieFormat 0
 #
 SecUnicodeMapFile /etc/modsecurity/unicode.mapping 20127
 <% end -%>
+
+# Improve the quality of ModSecurity by sharing information about your
+# current ModSecurity version and dependencies versions.
+# The following information will be shared: ModSecurity version,
+# Web Server version, APR version, PCRE version, Lua version, Libxml2
+# version, Anonymous unique id for host.
+SecStatusEngine On
