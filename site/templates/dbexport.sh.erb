@@ -29,7 +29,7 @@ export() { # 1=host, 2=user, 3=password, 4=database
   # Check the current database against the older file; if they've the same content, chuck the new one.
   head -n -1 ${OLDFILE} > ${OLDFILE}.cmp
   head -n -1 ${FILE} > ${FILE}.cmp # Strip off the last line; it's got a timestamp (and so would always be diff)
-  cmp -s ${OLDFILE}.cmp ${FILE}.cmp && rm ${FILE} || echo -n "Exported ${DB} to ${FILE}."
+  cmp -s ${OLDFILE}.cmp ${FILE}.cmp && rm ${FILE} || echo "Exported ${DB} to ${FILE}."
   rm -f ${OLDFILE}.cmp ${FILE}.cmp # gold star for cleanliness
 }
 
