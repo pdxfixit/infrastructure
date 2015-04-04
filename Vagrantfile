@@ -69,7 +69,7 @@ Vagrant.configure("2") do |config|
     node.vm.network :forwarded_port, guest: 3306, host: 3306
 
     node.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "1024", "--cpus", "2", "--ioapic", "on", "--name", fqdn]
+      vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on", "--name", fqdn]
     end
 
     node.vm.synced_folder ".", "/root/pdxfixit-infra"
