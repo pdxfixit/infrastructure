@@ -32,8 +32,7 @@ Vagrant.configure("2") do |config|
 
   # Cache yum update files using vagrant-cachier, if installed
   if Vagrant.has_plugin?('vagrant-cachier')
-    config.cache.auto_detect = true
-    config.cache.scope = :box
+    config.cache.scope = :machine
   end
 
   if Vagrant.has_plugin?('vagrant-triggers')
