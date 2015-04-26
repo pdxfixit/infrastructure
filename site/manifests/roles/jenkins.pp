@@ -1,6 +1,9 @@
 # Jenkins
 class site::roles::jenkins {
 
-  include jenkins
+  class { '::jenkins':
+    configure_firewall => true,
+    lts                => true,
+  }
 
 }
