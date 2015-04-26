@@ -37,13 +37,13 @@ Vagrant.configure("2") do |config|
 
   if Vagrant.has_plugin?('vagrant-triggers')
     # Restore databases
-    config.trigger.after [:reload, :resume, :up], :option => "value" do
+    config.trigger.after [:reload, :resume, :up], :force => true, :option => "value" do
       info "Restoring databases..."
       run_remote "/root/dbimport.sh"
     end
 
     # Export databases
-    config.trigger.before [:destroy, :halt, :reload, :suspend], :option => "value" do
+    config.trigger.before [:destroy, :halt, :reload, :suspend], :force => true, :option => "value" do
       info "Exporting databases..."
       run_remote "/root/dbexport.sh"
     end
@@ -66,6 +66,7 @@ Vagrant.configure("2") do |config|
     node.vm.network :forwarded_port, guest: 80, host: 80
     node.vm.network :forwarded_port, guest: 443, host: 443
     node.vm.network :forwarded_port, guest: 3306, host: 3306
+    node.vm.network :forwarded_port, guest: 8080, host: 8080
 
     node.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on", "--name", fqdn]
