@@ -1,7 +1,7 @@
 forge "https://forgeapi.puppetlabs.com"
 mod "hunner/hiera"
 mod "puppetlabs/apache"
-mod "puppetlabs/apt"
+mod "puppetlabs/apt", "1.8.0"
 mod "puppetlabs/concat"
 mod "puppetlabs/firewall"
 mod "puppetlabs/inifile"
