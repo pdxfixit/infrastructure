@@ -19,6 +19,12 @@ users_basic:
         type: 'ssh-rsa'
         key:  ''
 
+cronjobs:
+  touch:
+    command: '/usr/bin/touch /root/test-file'
+    user:    'root'
+    minute:  '*/1'
+
 mysql::server::root_password: 'password'
 
 databases:

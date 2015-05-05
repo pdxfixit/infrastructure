@@ -3,6 +3,7 @@ node 'www', default {
   class { '::site::roles::mysql::server': }
   class { '::site::roles::webserver': }
   class { '::site::roles::webserver::security': }
+  class { '::site::roles::webserver::cronjobs': }
   if $environment == 'dev' {
     class { '::site::roles::mailcatcher': }
     class { '::site::roles::webserver::xdebug': }
