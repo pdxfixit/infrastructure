@@ -7,6 +7,8 @@ node 'www', default {
     class { '::site::roles::jenkins': }
     class { '::site::roles::mailcatcher': }
     class { '::site::roles::webserver::xdebug': }
+  } else {
+    class { '::site::roles::jenkins': }
   }
 }
 
