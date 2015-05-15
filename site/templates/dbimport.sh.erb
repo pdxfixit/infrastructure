@@ -24,12 +24,12 @@ import() { # 1=host, 2=user, 3=password, 4=database
 
     # Check for a 'localization' file. If exists, execute.
     if [ -f "${DB}.localize.sql" ] ; then
-      echo "Localizing ${DB}..."
-      mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${DB}.localize.sql"
+      ${FILE}="${DB}.localize.sql"
     else if [ -f "${DB}.dev.sql" ] ; then
-      echo "Localizing ${DB}..."
-      mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${DB}.dev.sql"
+      ${FILE}="${DB}.dev.sql"
     fi
+    echo "Localizing ${DB}..."
+    mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE}"
   else
     echo "No file found for ${DB}."
   fi
