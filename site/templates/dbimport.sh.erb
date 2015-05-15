@@ -22,7 +22,12 @@ import() { # 1=host, 2=user, 3=password, 4=database
     echo "Importing ${FILE} into ${DB}..."
     mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE}"
 
-    # TODO: Check for a 'localization' file. If exists, execute.
+    # Check for a 'localization' file. If exists, execute.
+    if ls ${DB}.localize.sql 1> /dev/null 2>&1; then
+      FILE=$(ls ${DB}.localize.sql)
+      echo "Localizing ${DB}..."
+      mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE}"
+    fi
   else
     echo "No file found for ${DB}."
   fi
