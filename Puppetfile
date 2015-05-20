@@ -17,4 +17,5 @@ mod "mthibaut/users"
 mod "actionjack/mailcatcher"
 
 # PHP dependency management
+mod "maestrodev/wget"
 mod "willdurand/composer"
