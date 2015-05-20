@@ -15,3 +15,6 @@ mod "example42/puppi"
 mod "example42/timezone"
 mod "mthibaut/users"
 mod "actionjack/mailcatcher"
+
+# PHP dependency management
+mod "willdurand/composer"
