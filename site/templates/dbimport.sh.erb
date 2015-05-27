@@ -18,18 +18,18 @@ import() { # 1=host, 2=user, 3=password, 4=database
   DB="$4"
 
   if ls ${DB}.*.sql 1> /dev/null 2>&1; then
-    FILE=$(ls ${DB}.*.sql | tail -n 1)
+    FILE=$(ls ${DB}.[0-9]*.sql | tail -n 1)
     echo "Importing ${FILE} into ${DB}..."
     mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE}"
 
     # Check for a 'localization' file. If exists, execute.
     if [ -f "${DB}.localize.sql" ] ; then
-      ${FILE}="${DB}.localize.sql"
+      FILE2="${DB}.localize.sql"
     elif [ -f "${DB}.dev.sql" ] ; then
-      ${FILE}="${DB}.dev.sql"
+      FILE2="${DB}.dev.sql"
     fi
     echo "Localizing ${DB}..."
-    mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE}"
+    mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE2}"
   else
     echo "No file found for ${DB}."
   fi
