@@ -28,8 +28,10 @@ import() { # 1=host, 2=user, 3=password, 4=database
     elif [ -f "${DB}.dev.sql" ] ; then
       FILE2="${DB}.dev.sql"
     fi
-    echo "Localizing ${DB}..."
-    mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE2}"
+    if [ ! -z "${FILE2}" ] ; then
+      echo "Localizing ${DB}..."
+      mysql -h ${HOST} -u ${USER} -p"${PASS}" -D ${DB} --execute="SOURCE ${FILE2}"
+    fi
   else
     echo "No file found for ${DB}."
   fi
