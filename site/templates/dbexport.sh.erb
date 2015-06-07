@@ -22,7 +22,7 @@ export() { # 1=host, 2=user, 3=password, 4=database
   fi
 
   # Export the current database
-  FILE="${DB}.$(date +%Y%m%d%H%I%S).sql"
+  FILE="${DB}.$(date +%Y%m%d%H%M%S).sql"
   echo "Checking ${DB}..."
   mysqldump --single-transaction -h ${HOST} -u ${USER} -p"${PASS}" ${DB} > ${FILE}
 
