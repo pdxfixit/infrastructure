@@ -12,7 +12,7 @@ def deep_merge!(target, data)
   target.merge! data, &merger
 end
 
-# Copy and customize defaults.yaml.template => defaults.yaml to override; only the Manager will work by default
+# Copy and customize defaults.yaml.template => defaults.yaml to override
 _config = {
     "synced_folders" => {},
 }
