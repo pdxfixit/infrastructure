@@ -2,6 +2,13 @@
 # vi: set ft=ruby :
 require "yaml"
 
+# The following plugins can (should?) be used with this project;
+# * vagrant-cachier
+# * vagrant-hostmanager
+# * vagrant-triggers
+# * vagrant-vbguest
+# They can be installed by running `vagrant plugin install <plugin>`. See `vagrant plugin help` for more information.
+
 fqdn = "dev.pdxfixit.com"
 Vagrant.require_version '>= 1.6.0'
 
@@ -35,6 +42,13 @@ Vagrant.configure("2") do |config|
     config.cache.scope = :machine
   end
 
+  if Vagrant.has_plugin?('vagrant-hostmanager')
+    # include aliases
+    config.hostmanager.aliases_on_separate_lines = true
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+  end
+
   if Vagrant.has_plugin?('vagrant-triggers')
     # Restore databases
     config.trigger.after [:reload, :resume, :up], :force => true, :option => "value" do
@@ -59,6 +73,10 @@ Vagrant.configure("2") do |config|
   config.vm.define :dev do |node|
     node.vm.box = "puppetlabs/ubuntu-12.04-64-nocm"
     node.vm.hostname = "#{fqdn}"
+
+    if Vagrant.has_plugin?('vagrant-hostmanager')
+      node.hostmanager.aliases = %w(alt.www.pdxfixit.com) # can be multiple aliases (space delimited)
+    end
 
     node.ssh.forward_agent = true
     node.vm.network :private_network, ip: "192.168.47.10"
