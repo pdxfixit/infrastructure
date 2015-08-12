@@ -40,13 +40,13 @@ class site::roles::webserver (
   class { '::site::roles::webserver::php': }
 
   firewall { '102 allow http':
-    port   => [80],
+    dport  => [80],
     proto  => tcp,
     action => accept,
   }
 
   firewall { '103 allow https':
-    port   => [443],
+    dport  => [443],
     proto  => tcp,
     action => accept,
   }

@@ -15,7 +15,7 @@ class site::roles::mailcatcher (
   }
 
   firewall { '110 allow mailcatcher':
-    port   => [$http_port],
+    dport  => [$http_port],
     proto  => tcp,
     action => accept,
   }

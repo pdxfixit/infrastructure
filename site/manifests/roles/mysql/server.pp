@@ -28,7 +28,7 @@ class site::roles::mysql::server (
   }
 
   firewall { '101 allow mysql inbound':
-    port   => [3306],
+    dport  => [3306],
     proto  => tcp,
     action => accept,
   }

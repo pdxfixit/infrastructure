@@ -6,7 +6,7 @@ class site::roles::firewall {
   }
 
   firewall { '100 allow ssh':
-    port   => [22],
+    dport  => [22],
     proto  => tcp,
     action => accept,
   }
