@@ -1,7 +1,7 @@
 # Install the basic packages every system needs
 class site::base::r10k (
   $dir        = '/etc/puppet', # Should be /etc/puppet/environments/<env>
-  $puppetfile = '/root/pdxfixit-infra/Puppetfile', # normally /etc/puppet/Puppetfile
+  $puppetfile = '/pdxfixit/infra/Puppetfile', # normally /etc/puppet/Puppetfile
 ){
 
   case $::lsbdistcodename { # Ubuntu 14.04 v 12.04 (default)

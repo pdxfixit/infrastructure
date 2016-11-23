@@ -1,7 +1,7 @@
 # Configure puppet.conf as part of bootstrapping puppet
 class site::base::puppetconf (
   $environment = 'dev',
-  $modulepath  = '$confdir/environments/$environment/modules:$confdir/environments/$environment/:/root/pdxfixit-infra:$confdir',
+  $modulepath  = '$confdir/environments/$environment/modules:$confdir/environments/$environment/:/pdxfixit/infra:$confdir',
 ){
 
   ini_setting {

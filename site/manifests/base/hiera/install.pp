@@ -3,7 +3,7 @@
 # prior to the first full puppet run
 # File precedence is as it appears below
 class site::base::hiera::install (
-  $datadir = '/root/pdxfixit-infra',
+  $datadir = '/pdxfixit/infra',
 ){
 
   class { 'hiera':

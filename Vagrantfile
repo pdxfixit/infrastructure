@@ -90,7 +90,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on", "--name", fqdn]
     end
 
-    node.vm.synced_folder ".", "/root/pdxfixit-infra"
+    node.vm.synced_folder ".", "/pdxfixit/infra"
     node.vm.synced_folder ".", "/vagrant"
     node.vm.synced_folder "/databases", "/var/db"
 

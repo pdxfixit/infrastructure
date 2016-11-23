@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Puppet manifests must be uploaded to /root/pdxfixit-infra before running this script.
+# Puppet manifests must be uploaded to /pdxfixit/infra before running this script.
 
 if [ ! -d "/vagrant" ] ; then
   hostname "server.pdxfixit.com"
@@ -18,6 +18,22 @@ fi
 
 echo "Installing packages..."
 apt-get update -qq
+
+if [ ! -d "/pdxfixit/infra" ]; then
+  echo "Cloning PDXfixIT infrastructure-as-code..."
+
+  if [ ! -d "/pdxfixit/" ]; then
+    mkdir /pdxfixit
+  fi
+
+  apt-get install -y -qq git
+  git clone https://github.com/pdxfixit/infrastructure.git /pdxfixit/infra
+
+  if [ ! -f "/pdxfixit/infra/Puppetfile" ]; then
+    echo "ERROR: Could not clone PDXfixIT infrastructure."
+    exit 1
+  fi
+fi
 
 # 14.04 (trusty) vs 12.04 (precise)
 CODENAME=`lsb_release -c | cut -f2`
@@ -50,12 +66,12 @@ done
 mkdir -p /etc/puppet/environments/${ENV}/modules
 
 # r10k installs puppet modules
-puppet apply -e "class {'site::base::r10k': dir => '/etc/puppet/environments/${ENV}'}" --modulepath=/root/pdxfixit-infra
-puppet apply -e "class {'site::base::puppetconf': environment => '${ENV}'}" --modulepath="/root/pdxfixit-infra:/etc/puppet/environments/${ENV}/modules"
+puppet apply -e "class {'site::base::r10k': dir => '/etc/puppet/environments/${ENV}'}" --modulepath=/pdxfixit/infra
+puppet apply -e "class {'site::base::puppetconf': environment => '${ENV}'}" --modulepath="/pdxfixit/infra:/etc/puppet/environments/${ENV}/modules"
 
 # configure hiera via puppet and then run puppet apply
 echo "Running Puppet..."
 puppet apply -e 'class { "site::base::hiera::install": }'
-puppet apply /root/pdxfixit-infra/site/manifests
+puppet apply /pdxfixit/infra/site/manifests
 
-touch /root/setup-complete
+touch /pdxfixit/setup-complete
