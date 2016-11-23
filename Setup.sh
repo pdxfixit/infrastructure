@@ -19,12 +19,12 @@ fi
 echo "Installing packages..."
 apt-get update -qq
 
-# 14.04 else 12.04
+# 14.04 (trusty) vs 12.04 (precise)
 CODENAME=`lsb_release -c | cut -f2`
 if [ "${CODENAME}" == "trusty" ] ; then
-  apt-get install -y -qq wget git ruby zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev
-else
-  apt-get install -y -qq wget git ruby1.9.1-full ruby1.9.1 ruby1.9.1-dev ri1.9.1 build-essential libruby1.9.1 libssl-dev zlib1g-dev libaugeas-ruby1.9.1 rubygems
+  apt-get install -y -qq wget ruby zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev
+elif [ "${CODENAME}" == "precise" ] ; then
+  apt-get install -y -qq wget ruby1.9.1-full ruby1.9.1 ruby1.9.1-dev ri1.9.1 build-essential libruby1.9.1 libssl-dev zlib1g-dev libaugeas-ruby1.9.1 rubygems
 
   echo "Updating ruby..."
   update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.1 400 \
@@ -37,14 +37,14 @@ fi
 
 # Setup puppet
 echo "Installing Puppet..."
-wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb
+wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$CODENAME.deb
 for count in {1..30}; do
   puppet && break
   echo "attempt # ${count} - waiting 10 seconds..."
   sleep 10
-  dpkg -i puppetlabs-release-precise.deb && rm puppetlabs-release-precise.deb
-  apt-get -qq update
-  apt-get install -y -qq puppet
+  dpkg -i puppetlabs-release-pc1-$CODENAME.deb && rm puppetlabs-release-pc1-$CODENAME.deb
+  apt-get update -qq
+  apt-get install -y -qq puppet-common
 done
 
 mkdir -p /etc/puppet/environments/${ENV}/modules
