@@ -4,9 +4,9 @@ class site::base::r10k (
   $puppetfile = '/pdxfixit/infra/Puppetfile', # normally /etc/puppet/Puppetfile
 ){
 
-  case $::lsbdistcodename { # Ubuntu 14.04 v 12.04 (default)
-    'trusty': { $ruby = 'ruby' }
-    'precise', default: { $ruby = 'rubygems' }
+  case $::lsbdistcodename {
+    'precise': { $ruby = 'rubygems' }
+    default: { $ruby = 'ruby' }
   }
 
   package { [ $ruby, 'git' ]:

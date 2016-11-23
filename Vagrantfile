@@ -10,7 +10,7 @@ require "yaml"
 # They can be installed by running `vagrant plugin install <plugin>`. See `vagrant plugin help` for more information.
 
 fqdn = "dev.pdxfixit.com"
-Vagrant.require_version '>= 1.6.0'
+Vagrant.require_version '>= 1.8.0'
 
 # Initialize config
 def deep_merge!(target, data)
@@ -71,7 +71,7 @@ Vagrant.configure("2") do |config|
   # Development
   ##
   config.vm.define :dev do |node|
-    node.vm.box = "puppetlabs/ubuntu-12.04-64-nocm"
+    node.vm.box = "puppetlabs/ubuntu-16.04-64-nocm"
     node.vm.hostname = "#{fqdn}"
 
     if Vagrant.has_plugin?('vagrant-hostmanager')
@@ -87,6 +87,7 @@ Vagrant.configure("2") do |config|
     node.vm.network :forwarded_port, guest: 8080, host: 8080
 
     node.vm.provider :virtualbox do |vb|
+      vb.linked_clone = true
       vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on", "--name", fqdn]
     end
 
