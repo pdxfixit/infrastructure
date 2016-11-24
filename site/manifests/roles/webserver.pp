@@ -1,16 +1,11 @@
 # Everything needed to set up a basic web server
-class site::roles::webserver (
-  $vhosts = {},
-  ) {
+class site::roles::webserver {
 
   anchor { '::site::roles::webserver': }
 
   Class {
     require => Anchor['::site::roles::webserver'],
   }
-
-  # Create vhosts
-  create_resources('apache::vhost', $vhosts)
 
   # Create users
   file { '/var/www':
@@ -25,19 +20,20 @@ class site::roles::webserver (
     purge  => true,
   }
 
-  users { 'basic': }
+  class { 'nginx': }
 
-  class { 'apache':
-    default_confd_files => false,
-    default_mods        => false,
-    default_vhost       => false,
-    manage_group        => false,
-    manage_user         => false,
-    mpm_module          => 'prefork',
-    service_name        => 'apache2',
+  nginx::resource::vhost { 'nwea':
+    ensure      => present,
+    listen_port => 8888,
+    www_root    => '/var/www/nwea',
+    require     => Vcsrepo['/var/www/nwea'],
   }
 
-  class { '::site::roles::webserver::php': }
+  vcsrepo { '/var/www/nwea':
+    ensure   => present,
+    provider => 'git',
+    source   => 'git://github.com/nwea-techops/tech_quiz.git',
+  }
 
   firewall { '102 allow http':
     dport  => [80],
@@ -50,12 +46,6 @@ class site::roles::webserver (
     proto  => tcp,
     action => accept,
   }
-
-  include apache::mod::autoindex
-  include apache::mod::deflate
-  include apache::mod::rewrite
-  include apache::mod::ssl
-  include apache::mod::status
 
   # www-data compliance script
   file { '/root/comply.sh':

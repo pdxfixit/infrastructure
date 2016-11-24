@@ -1,6 +1,6 @@
 forge "https://forgeapi.puppetlabs.com"
 mod "puppet/hiera"
-mod "puppetlabs/apache"
+mod "puppet/nginx"
 mod "puppetlabs/apt"
 mod "puppetlabs/concat"
 mod "puppetlabs/firewall"

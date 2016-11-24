@@ -80,20 +80,14 @@ Vagrant.configure("2") do |config|
 
     node.ssh.forward_agent = true
     node.vm.network :private_network, ip: "192.168.47.10"
-    node.vm.network :forwarded_port, guest: 22, host: 2200, id: "ssh"
-    node.vm.network :forwarded_port, guest: 80, host: 80
-    node.vm.network :forwarded_port, guest: 443, host: 443
-    node.vm.network :forwarded_port, guest: 3306, host: 3306
-    node.vm.network :forwarded_port, guest: 8080, host: 8080
+    node.vm.network :forwarded_port, guest: 8888, host: 8888
 
     node.vm.provider :virtualbox do |vb|
       vb.linked_clone = true
-      vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on", "--name", fqdn]
+      vb.customize ["modifyvm", :id, "--memory", "2048", "--cpus", "1", "--ioapic", "on", "--name", fqdn]
     end
 
     node.vm.synced_folder ".", "/pdxfixit/infra"
-    node.vm.synced_folder ".", "/vagrant"
-    node.vm.synced_folder "/databases", "/var/db"
 
     # web folders need explicit permissions here; the other synced folders can safely default to root ownership
     FOLDERS.each do |name, folders|
