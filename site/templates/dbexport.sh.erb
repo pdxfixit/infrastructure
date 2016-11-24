@@ -32,13 +32,12 @@ export() { # 1=host, 2=user, 3=password, 4=database
   cmp -s ${OLDFILE}.cmp ${FILE}.cmp && rm ${FILE} || echo "Exported ${DB} to ${FILE}."
   rm -f ${OLDFILE}.cmp ${FILE}.cmp # gold star for cleanliness
 }
-
 <% @databases.each do |database, setting| -%>
 
 # <%= database %>
 if [ ! -z "$1" ] && [ "$1" != "<%= database %>" ] ; then
   : # if a command-line argument has been provided, and it's not this database, skip
 else
-  export <%= setting["host"] %> <%= setting["user"] %> <%= setting["password"] %> <%= database %>
+  export '<%= setting["host"] %>' '<%= setting["user"] %>' '<%= setting["password"] %>' '<%= database %>'
 fi
 <% end -%>
