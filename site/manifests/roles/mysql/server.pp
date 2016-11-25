@@ -7,25 +7,7 @@ class site::roles::mysql::server (
   $tmp_table_size   = '64M',
 ) {
 
-  class { '::mysql::client':
-    package_ensure => 'installed',
-  }
-
-  file { 'dbimport.sh':
-    path    => '/root/dbimport.sh',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0770',
-    content => template('site/dbimport.sh.erb'),
-  }
-
-  file { 'dbexport.sh':
-    path    => '/root/dbexport.sh',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0770',
-    content => template('site/dbexport.sh.erb'),
-  }
+  include site::roles::mysql
 
   firewall { '101 allow mysql inbound':
     dport  => [3306],
@@ -35,34 +17,29 @@ class site::roles::mysql::server (
 
   create_resources('mysql::db', $databases)
 
-  class { '::mysql::server':
-    root_password    => $root_password,
-    restart          => True,
+  class {'::mysql::server':
+    package_name     => 'mariadb-server',
+    package_ensure   => "10.1.19+maria-1~${::lsbdistcodename}",
     service_name     => 'mysql',
-    override_options => { 'mysqld' => {
-      'max_connections'                 => '1024',
-      'max_connections'                 => '1024',
-      'innodb_buffer_pool_size'         => $buffer_pool_size,
-      'innodb_additional_mem_pool_size' => '20M',
-      'bind_address'                    => '0.0.0.0',
-      'tmp_table_size'                  => $tmp_table_size,
-      'max_heap_table_size'             => '64M',
-      'key_buffer_size'                 => '16M',
-      'table_cache'                     => '2000',
-      'thread_cache'                    => '20',
-      'table_definition_cache'          => '4096',
-      'table_open_cache'                => '1024',
-      'query_cache_type'                => '1',
-      'query_cache_size'                => $query_cache_size,
-      'innodb_flush_method'             => 'O_DIRECT',
-      'innodb_flush_log_at_trx_commit'  => '1',
-      'innodb_file_per_table'           => '1',
-      'long_query_time'                 => '5',
-      'max-allowed-packet'              => '16M',
-      'max-connect-errors'              => '1000000',
-      }
+    root_password    => $root_pwd,
+    override_options => {
+      mysqld => {
+        'innodb_buffer_pool_size' => $buffer_pool_size,
+        'log-error'               => '/var/log/mysql/mariadb.log',
+        'pid-file'                => '/var/run/mysqld/mysqld.pid',
+        'query_cache_size'        => $query_cache_size,
+        'tmp_table_size'          => $tmp_table_size,
+      },
+      mysqld_safe => {
+        'log-error' => '/var/log/mysql/mariadb.log',
+      },
     },
+    require          => Apt::Source['mariadb'],
   }
+
+  Apt::Source['mariadb'] ~>
+  Class['apt::update'] ->
+  Class['::mysql::server']
 
   # Allow development access
   if $environment == 'dev' {

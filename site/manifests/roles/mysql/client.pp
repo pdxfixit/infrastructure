@@ -1,11 +1,19 @@
 # Wrap mysql client class
 class site::roles::mysql::client (
-  $databases = hiera('databases'),
+  $databases = hiera('databases', {}),
 ) {
 
-  class { '::mysql::client':
-    package_ensure => 'installed',
+  include site::roles::mysql
+
+  class {'::mysql::client':
+    package_name    => 'mariadb-client',
+    package_ensure  => "10.1.19+maria-1~${::lsbdistcodename}",
+    bindings_enable => true,
   }
+
+  Apt::Source['mariadb'] ~>
+  Class['apt::update'] ->
+  Class['::mysql::client']
 
   file { 'dbimport.sh':
     content => template('site/dbimport.sh.erb'),

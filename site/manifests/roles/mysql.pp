@@ -8,4 +8,20 @@ class site::roles::mysql {
     require => Anchor['::site::roles::mysql'],
   }
 
+  include apt
+
+  apt::source { 'mariadb':
+    location => 'http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.1/ubuntu',
+    release  => $::lsbdistcodename,
+    repos    => 'main',
+    key      => {
+      id     => '199369E5404BD5FC7D2FE43BCBCB082A1BB943DB',
+      server => 'hkp://keyserver.ubuntu.com:80',
+    },
+    include => {
+      src   => false,
+      deb   => true,
+    },
+  }
+
 }
