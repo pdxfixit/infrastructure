@@ -1,41 +1,41 @@
 # All site-specific PHP settings
 # the many augeas settings were extracted from the rackspace configuration
 class site::roles::webserver::php (
-  $settings = hiera('php', []),
+  $settings = hiera('php', {}),
 ) {
 
-  if defined($settings['display_errors']) {
-    $display_errors = $settings['display_errors']
+  if defined($settings[display_errors]) {
+    $display_errors = $settings[display_errors]
   } else {
     $display_errors = 'Off'
   }
 
-  if defined($settings['error_reporting']) {
-    $error_reporting = $settings['error_reporting']
+  if defined($settings[error_reporting]) {
+    $error_reporting = $settings[error_reporting]
   } else {
     $error_reporting = '0'
   }
 
-  if defined($settings['sendmail_path']) {
-    $sendmail_path = $settings['sendmail_path']
+  if defined($settings[sendmail_path]) {
+    $sendmail_path = $settings[sendmail_path]
   } else {
     $sendmail_path = '/usr/sbin/sendmail -t -i'
   }
 
-  if defined($settings['smtp_host']) {
-    $smtp_host = $settings['smtp_host']
+  if defined($settings[smtp_host]) {
+    $smtp_host = $settings[smtp_host]
   } else {
     $smtp_host = 'localhost'
   }
 
-  if defined($settings['smtp_port']) {
-    $smtp_port = $settings['smtp_port']
+  if defined($settings[smtp_port]) {
+    $smtp_port = $settings[smtp_port]
   } else {
     $smtp_port = '25'
   }
 
-  if $settings['use_apc'] {
-    $use_apc = $settings['use_apc']
+  if $settings[use_apc] {
+    $use_apc = $settings[use_apc]
   } else {
     $use_apc = false
   }
@@ -49,7 +49,7 @@ class site::roles::webserver::php (
       exec { 'php5enmod-mcrypt':
         command => '/usr/sbin/php5enmod mcrypt && service apache2 reload',
         creates => '/etc/php5/apache2/conf.d/20-mcrypt.ini',
-        require => Package['php5-mcrypt'],
+        require => Package[php5-mcrypt],
       }
     }
 #    'precise', default: {
@@ -80,7 +80,7 @@ class site::roles::webserver::php (
       package { 'libpcre3-dev': ensure => 'installed' }
       if $use_apc {
         php::pecl::module { 'apc':
-          require     => Package['libpcre3-dev'],
+          require     => Package[libpcre3-dev],
           use_package => false,
         }
       }
