@@ -10,6 +10,6 @@ resource "digitalocean_droplet" "pdxfixit" {
   region = "sfo1"
   size = "512mb"
   backups = "true"
-  ssh_keys = ["79:28:df:ec:a6:da:6c:18:11:ab:85:8a:b3:33:c2:1e"]
-  user_data = ${file("Setup.sh")}
+  ssh_keys = ["a3:87:57:8b:09:7c:59:c5:f7:cc:75:77:26:6f:ab:38"]
+  user_data = "${file("Setup.sh")}"
 }
