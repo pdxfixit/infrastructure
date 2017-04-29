@@ -35,7 +35,7 @@ if [ ! -d "/pdxfixit/infra" ]; then
   fi
 fi
 
-# 14.04 (trusty) vs 12.04 (precise)
+# 16.04 (xenial) vs 14.04 (trusty) vs 12.04 (precise)
 CODENAME=`lsb_release -c | cut -f2`
 if [ "${CODENAME}" == "trusty" ] ; then
   apt-get install -y -qq wget ruby zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev
