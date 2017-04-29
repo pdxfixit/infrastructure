@@ -1,22 +1,22 @@
-forge "https://forgeapi.puppetlabs.com"
-mod "puppet/hiera"
-mod "puppetlabs/apache"
-mod "puppetlabs/apt"
-mod "puppetlabs/concat"
-mod "puppetlabs/firewall"
-mod "puppetlabs/inifile"
-mod "puppetlabs/java"
-mod "puppetlabs/mysql"
-mod "puppetlabs/ntp", "4.2.0"
-mod "puppetlabs/ruby"
-mod "puppetlabs/stdlib"
-mod "puppetlabs/vcsrepo"
-mod "example42/php"
-mod "example42/puppi"
-mod "example42/timezone"
-mod "mthibaut/users"
-mod "actionjack/mailcatcher"
+forge 'https://forge.puppetlabs.com'
+mod 'puppet/hiera'
+mod 'puppetlabs/apache'
+mod 'puppetlabs/apt'
+mod 'puppetlabs/concat'
+mod 'puppetlabs/firewall'
+mod 'puppetlabs/inifile'
+mod 'puppetlabs/java'
+mod 'puppetlabs/mysql'
+mod 'puppetlabs/ntp', '4.2.0'
+mod 'puppetlabs/ruby'
+mod 'puppetlabs/stdlib'
+mod 'puppetlabs/vcsrepo'
+mod 'example42/php'
+mod 'example42/puppi'
+mod 'example42/timezone'
+mod 'mthibaut/users'
+mod 'actionjack/mailcatcher'
 
 # PHP dependency management
-mod "maestrodev/wget"
-mod "willdurand/composer"
+mod 'maestrodev/wget'
+mod 'willdurand/composer'

@@ -2,7 +2,7 @@
 # Wraps other packages to avoid having to redefine these for each node
 class site::roles::base (
   $timezone = 'America/Los_Angeles',
-  ) {
+) {
   anchor { '::site::roles::base': }
 
   Class {
