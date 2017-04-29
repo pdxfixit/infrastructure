@@ -4,10 +4,6 @@ class site::roles::mysql {
   anchor { '::site::roles::mysql': }
   class { '::site::roles::mysql::client': }
 
-  Class {
-    require => Anchor['::site::roles::mysql'],
-  }
-
   include apt
 
   apt::source { 'mariadb':

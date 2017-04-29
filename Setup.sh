@@ -55,23 +55,25 @@ fi
 echo "Installing Puppet..."
 wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$CODENAME.deb
 for count in {1..30}; do
-  puppet && break
+  if [ -x /opt/puppetlabs/bin/puppet ]; then
+   break
+  fi
   echo "attempt # ${count} - waiting 10 seconds..."
   sleep 10
   dpkg -i puppetlabs-release-pc1-$CODENAME.deb && rm puppetlabs-release-pc1-$CODENAME.deb
   apt-get update -qq
-  apt-get install -y -qq puppet-common
+  apt-get install -y -qq puppet-agent
 done
 
-mkdir -p /etc/puppet/environments/${ENV}/modules
+mkdir -p /etc/puppetlabs/code/environments/${ENV}/modules
 
 # r10k installs puppet modules
-puppet apply -e "class {'site::base::r10k': dir => '/etc/puppet/environments/${ENV}'}" --modulepath=/pdxfixit/infra
-puppet apply -e "class {'site::base::puppetconf': environment => '${ENV}'}" --modulepath="/pdxfixit/infra:/etc/puppet/environments/${ENV}/modules"
+/opt/puppetlabs/bin/puppet apply -e "class {'site::base::r10k': environment => '${ENV}'}" --modulepath=/pdxfixit/infra
+/opt/puppetlabs/bin/puppet apply -e "class {'site::base::puppetconf': environment => '${ENV}'}" --modulepath="/pdxfixit/infra:/etc/puppetlabs/code/environments/${ENV}/modules"
 
 # configure hiera via puppet and then run puppet apply
 echo "Running Puppet..."
-puppet apply -e 'class { "site::base::hiera::install": }'
-puppet apply /pdxfixit/infra/site/manifests
+/opt/puppetlabs/bin/puppet apply /pdxfixit/infra/site/manifests/base/hiera.pp
+/opt/puppetlabs/bin/puppet apply /pdxfixit/infra/site/manifests
 
 touch /pdxfixit/setup-complete

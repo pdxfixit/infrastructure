@@ -4,31 +4,33 @@ class site::roles::webserver::php (
   $settings = hiera('php', {}),
 ) {
 
-  if defined($settings[display_errors]) {
+  validate_hash($settings)
+
+  if has_key($settings, 'display_errors') {
     $display_errors = $settings[display_errors]
   } else {
     $display_errors = 'Off'
   }
 
-  if defined($settings[error_reporting]) {
+  if has_key($settings, 'error_reporting') {
     $error_reporting = $settings[error_reporting]
   } else {
     $error_reporting = '0'
   }
 
-  if defined($settings[sendmail_path]) {
+  if has_key($settings, 'sendmail_path') {
     $sendmail_path = $settings[sendmail_path]
   } else {
     $sendmail_path = '/usr/sbin/sendmail -t -i'
   }
 
-  if defined($settings[smtp_host]) {
+  if has_key($settings, 'smtp_host') {
     $smtp_host = $settings[smtp_host]
   } else {
     $smtp_host = 'localhost'
   }
 
-  if defined($settings[smtp_port]) {
+  if has_key($settings, 'smtp_port') {
     $smtp_port = $settings[smtp_port]
   } else {
     $smtp_port = '25'
@@ -132,7 +134,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-auto_append_file':
       entry => 'PHP/auto_append_file',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -144,7 +146,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-auto_prepend_file':
       entry => 'PHP/auto_prepend_file',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -180,13 +182,13 @@ class site::roles::webserver::php (
   php::augeas {
     'php-disable_classes':
       entry => 'PHP/disable_classes',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-disable_functions':
       entry => 'PHP/disable_functions',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -204,7 +206,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-doc_root':
       entry => 'PHP/doc_root',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -372,37 +374,37 @@ class site::roles::webserver::php (
   php::augeas {
     'php-mysql.default_host':
       entry => 'PHP/mysql.default_host',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-mysql.default_password':
       entry => 'PHP/mysql.default_password',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-mysql.default_port':
       entry => 'PHP/mysql.default_port',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-mysql.default_socket':
       entry => 'PHP/mysql.default_socket',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-mysql.default_user':
       entry => 'PHP/mysql.default_user',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-mysqli.default_host':
       entry => 'PHP/mysqli.default_host',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -414,19 +416,19 @@ class site::roles::webserver::php (
   php::augeas {
     'php-mysqli.default_pw':
       entry => 'PHP/mysqli.default_pw',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-mysqli.default_socket':
       entry => 'PHP/mysqli.default_socket',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-mysqli.default_user':
       entry => 'PHP/mysqli.default_user',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -588,7 +590,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-safe_mode_exec_dir':
       entry => 'PHP/safe_mode_exec_dir',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -600,7 +602,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-safe_mode_include_dir':
       entry => 'PHP/safe_mode_include_dir',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -660,13 +662,13 @@ class site::roles::webserver::php (
   php::augeas {
     'php-session.cookie_domain':
       entry => 'PHP/session.cookie_domain',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
     'php-session.cookie_httponly':
       entry => 'PHP/session.cookie_httponly',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -732,7 +734,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-session.referer_check':
       entry => 'PHP/session.referer_check',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -864,7 +866,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-unserialize_callback_func':
       entry => 'PHP/unserialize_callback_func',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {
@@ -882,7 +884,7 @@ class site::roles::webserver::php (
   php::augeas {
     'php-user_dir':
       entry => 'PHP/user_dir',
-      value => NULL;
+      value => nil;
   }
 
   php::augeas {

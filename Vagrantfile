@@ -92,7 +92,7 @@ Vagrant.configure('2') do |config|
     end
 
     node.vm.synced_folder '.', '/pdxfixit/infra'
-    # node.vm.synced_folder '.', '/vagrant'
+    node.vm.synced_folder '.', '/vagrant'
     # node.vm.synced_folder '/databases', '/var/db'
 
     # web folders need explicit permissions here; the other synced folders can safely default to root ownership
@@ -108,8 +108,6 @@ Vagrant.configure('2') do |config|
 
     # Make sure we point the domains to localhost
     node.vm.provision 'Setup', type: 'shell', path: 'Setup.sh', run: 'once'
-
-    node.vm.post_up_message = 'The PDXfixIT Development Environment is now ready for use.'
   end
 
 end

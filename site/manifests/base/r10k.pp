@@ -1,7 +1,7 @@
 # Install the basic packages every system needs
 class site::base::r10k (
-  $dir        = '/etc/puppet', # Should be /etc/puppet/environments/<env>
-  $puppetfile = '/pdxfixit/infra/Puppetfile', # normally /etc/puppet/Puppetfile
+  $environment = 'dev',
+  $puppetfile  = '/pdxfixit/infra/Puppetfile', # normally /etc/puppetlabs/puppet/Puppetfile
 ){
 
   case $::lsbdistcodename {
@@ -9,23 +9,29 @@ class site::base::r10k (
     default: { $ruby = 'ruby' }
   }
 
-  package { [ $ruby, 'git' ]:
+  package { [
+    $ruby,
+    'git',
+  ]:
     ensure => 'installed',
   }
 
   package { 'r10k':
     ensure   => 'installed',
     provider => 'gem',
-    require  => Package[$ruby],
+    require  => [
+      Package[$ruby],
+      Package['git'],
+    ],
   }
 
   # Run r10k
   exec { 'run r10k':
-    command     => "r10k --verbose info puppetfile install",
-    cwd         => $dir,
+    command     => 'r10k --verbose info puppetfile install',
+    cwd         => "/etc/puppetlabs/code/environments/$environment",
     environment => ['HOME=/root',"PUPPETFILE=${puppetfile}"],
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    require     => [ Package['git'], Package['r10k'] ],
+    require     => Package['r10k'],
   }
 
 }

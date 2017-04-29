@@ -1,13 +1,9 @@
 # Everything needed to set up a basic web server
 class site::roles::webserver (
   $vhosts = {},
-  ) {
+) {
 
   anchor { '::site::roles::webserver': }
-
-  Class {
-    require => Anchor['::site::roles::webserver'],
-  }
 
   # Create vhosts
   create_resources('apache::vhost', $vhosts)
