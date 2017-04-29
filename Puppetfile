@@ -1,5 +1,5 @@
 forge 'https://forge.puppetlabs.com'
-mod 'puppet/archive'
+mod 'puppet/archive' # Dependency of puppet-php
 mod 'puppet/hiera'
 mod 'puppet/php'
 mod 'puppetlabs/apache'
