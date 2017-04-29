@@ -19,7 +19,7 @@ class site::roles::mysql::server (
 
   class {'::mysql::server':
     package_name     => 'mariadb-server',
-    package_ensure   => "10.1.19+maria-1~${::lsbdistcodename}",
+    install_options  => '--allow-unauthenticated', # dear god why
     service_name     => 'mysql',
     root_password    => $root_pwd,
     override_options => {

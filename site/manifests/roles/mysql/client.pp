@@ -7,7 +7,7 @@ class site::roles::mysql::client (
 
   class {'::mysql::client':
     package_name    => 'mariadb-client',
-    package_ensure  => "10.1.19+maria-1~${::lsbdistcodename}",
+    install_options => '--allow-unauthenticated', # dear god why
     bindings_enable => true,
   }
 
