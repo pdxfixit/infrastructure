@@ -1,6 +1,9 @@
 # XDebug for PHP
 class site::roles::webserver::xdebug {
-  php::pecl::module { 'xdebug': }
+
+  php::module { 'xdebug':
+    provider =>'pecl',
+  }
 
   # TODO: We really need to do a `find / -name 'xdebug.so'` and put the output below...
   $xdebug = 'zend_extension="/usr/lib/php5/20090626/xdebug.so"
@@ -16,4 +19,5 @@ xdebug.remote_port=9000'
     mode    => '0644',
     content => $xdebug,
   }
+
 }
