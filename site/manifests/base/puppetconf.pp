@@ -17,6 +17,16 @@ class site::base::puppetconf (
       setting => 'environment',
       section => 'main',
       value   => $environment;
+    'warnings':
+      ensure  => present,
+      path    => '/etc/puppetlabs/puppet/puppet.conf',
+      setting => 'disable_warnings',
+      section => 'main',
+      value   => [
+        'deprecations',
+        'undefined_resources',
+        'undefined_variables',
+      ];
   }
 
 }
