@@ -27,8 +27,6 @@ class site::roles::webserver (
     default_confd_files => false,
     default_mods        => false,
     default_vhost       => false,
-    manage_group        => false,
-    manage_user         => false,
     mpm_module          => 'prefork',
     service_name        => 'apache2',
   }

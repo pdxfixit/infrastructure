@@ -73,7 +73,6 @@ mkdir -p /etc/puppetlabs/code/environments/${ENV}/modules
 
 # configure hiera via puppet and then run puppet apply
 echo "Running Puppet..."
-/opt/puppetlabs/bin/puppet apply /pdxfixit/infra/site/manifests/base/hiera.pp
 /opt/puppetlabs/bin/puppet apply /pdxfixit/infra/site/manifests
 
 touch /pdxfixit/setup-complete

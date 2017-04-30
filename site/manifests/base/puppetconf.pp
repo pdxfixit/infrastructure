@@ -1,7 +1,8 @@
 # Configure puppet.conf as part of bootstrapping puppet
 class site::base::puppetconf (
+  $datadir     = '/pdxfixit/infra',
   $environment = 'dev',
-  $modulepath  = "./modules:\$basemodulepath:/pdxfixit/infra",
+  $modulepath  = "./modules:\$basemodulepath:$datadir",
 ){
 
   ini_setting {
@@ -27,6 +28,11 @@ class site::base::puppetconf (
         'undefined_resources',
         'undefined_variables',
       ];
+  }
+
+  file { "/etc/puppetlabs/code/environments/$environment/hieradata":
+    ensure => link,
+    target => $datadir,
   }
 
 }
