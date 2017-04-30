@@ -10,7 +10,7 @@ if [ ! -d "/vagrant" ] ; then
     if [[ "$l" =~ "docroot:" ]] ; then
       mkdir -p ${l/#docroot: }
     fi
-  done < node/server.pdxfixit.com.yaml
+  done < nodes/server.pdxfixit.com.yaml
 else
   hostname "dev.pdxfixit.com"
   ENV="dev"

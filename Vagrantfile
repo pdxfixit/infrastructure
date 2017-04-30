@@ -26,7 +26,7 @@ _config = {
 
 # Local-specific config (not tracked by git) -- defaults.yaml
 begin
-  deep_merge!(_config, YAML.load(File.open(File.join(File.dirname(__FILE__), "node/#{fqdn}.yaml"), File::RDONLY).read))
+  deep_merge!(_config, YAML.load(File.open(File.join(File.dirname(__FILE__), "nodes/#{fqdn}.yaml"), File::RDONLY).read))
 rescue Errno::ENOENT
   begin
     deep_merge!(_config, YAML.load(File.open(File.join(File.dirname(__FILE__), 'defaults.yaml'), File::RDONLY).read))
@@ -84,7 +84,7 @@ Vagrant.configure('2') do |config|
     node.vm.network :forwarded_port, guest: 80, host: 80
     node.vm.network :forwarded_port, guest: 443, host: 443
     # node.vm.network :forwarded_port, guest: 3306, host: 3306
-    node.vm.network :forwarded_port, guest: 8080, host: 8080
+    # node.vm.network :forwarded_port, guest: 8080, host: 8080
 
     node.vm.provider :virtualbox do |vb|
       vb.linked_clone = true

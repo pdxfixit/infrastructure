@@ -2,6 +2,6 @@
 .project
 .vagrant
 defaults.yaml
-node/*
-!node/example.pdxfixit.com.yaml
+nodes/*
+!nodes/example.pdxfixit.com.yaml
 spec/fixtures

@@ -9,7 +9,7 @@ class site::base::hiera::install (
   class { 'hiera':
     hierarchy => [
       '%{environment}',
-      'node/%{::fqdn}',
+      'nodes/%{::fqdn}',
       'defaults',
     ],
     datadir => $datadir,
