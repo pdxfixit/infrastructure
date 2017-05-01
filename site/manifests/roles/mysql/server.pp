@@ -1,7 +1,6 @@
 # Set up a mysql server instance
 class site::roles::mysql::server (
   $buffer_pool_size = '128M',
-  $databases        = hiera('databases', {}),
   $query_cache_size = '64M',
   $root_pwd         = hiera('mysql::server::root_password', 'password'),
   $tmp_table_size   = '64M',
@@ -14,8 +13,6 @@ class site::roles::mysql::server (
     proto  => tcp,
     action => accept,
   }
-
-  create_resources('mysql::db', $databases)
 
   class {'::mysql::server':
     package_name     => 'mariadb-server',

@@ -1,6 +1,6 @@
 # Everything needed to set up a basic web server
 class site::roles::webserver (
-  $vhosts = {},
+  $vhosts   = {}, # magic hiera lookup
 ) {
 
   anchor { '::site::roles::webserver': }
@@ -18,6 +18,7 @@ class site::roles::webserver (
     group  => 'www-data',
     mode   => '0755',
     purge  => true,
+    before => Ssh_authorized_key['www-data'],
   }
 
   $vhosts.each |$k, $v| {
