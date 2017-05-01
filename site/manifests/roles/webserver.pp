@@ -10,18 +10,29 @@ class site::roles::webserver (
 
   # Create users
   file { '/var/www':
-    ensure => 'directory',
+    ensure => directory,
   }
 
   file { '/var/www/.ssh':
-    ensure => 'directory',
+    ensure => directory,
+    owner  => 'www-data',
     group  => 'www-data',
     mode   => '0755',
-    owner  => 'www-data',
     purge  => true,
   }
 
-  users { 'basic': }
+  # create /var/www/<domain>
+  $vhosts.each |$k, $v| {
+    file { "/var/www/${v['servername']}":
+      ensure => directory,
+      owner  => 'www-data',
+      group  => 'www-data',
+      mode   => '0755',
+      before => Apache::Vhost[$k], # vhost resource will create /var/www/<domain>/www
+    }
+  }
+
+  # users { 'basic': }
 
   class { 'apache':
     default_confd_files => false,
