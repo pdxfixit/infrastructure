@@ -41,9 +41,6 @@ class site::roles::webserver (
     # }
   }
 
-  # Create users
-  # users { 'basic': }
-
   class { 'apache':
     default_confd_files => false,
     default_mods        => false,

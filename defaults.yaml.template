@@ -8,13 +8,17 @@ ntp::servers:
   - time.nist.gov iburst
   - nist1-la.ustiming.org iburst
 
-users_basic:
+ssh_authorized_keys:
   www-data:
     ensure: present
-    shell: /bin/bash
-    home: /var/www
-    managehome: true
-    groups: www-data
+    user: www-data
+    type: ssh-rsa
+    key: 'AAAA'
+  root:
+    ensure: present
+    user: root
+    type: ssh-rsa
+    key: 'AAAA'
 
 apache::mod::prefork::startservers: 3
 apache::mod::prefork::minspareservers: 2
