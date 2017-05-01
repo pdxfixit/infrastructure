@@ -27,9 +27,12 @@ apache::mod::prefork::serverlimit: 24
 apache::mod::prefork::maxclients: 24
 apache::mod::prefork::maxrequestsperchild: 500
 
+php:
+  display_errors: 'On'
+  error_reporting: 'E_ALL & ~E_NOTICE'
+
 site::roles::webserver::vhosts:
-  pdxfixit_web_http:
-    synced_folder: "/www/pdxfixit"
+  pdxfixit_web_http: # the 'pdxfixit' part here should be reused below.
     default_vhost: true
     servername: pdxfixit.com
     port: "80"
@@ -42,3 +45,32 @@ site::roles::webserver::vhosts:
       - FollowSymLinks
       - MultiViews
     override: "All"
+  familyinbloom_web_http:
+    servername: familyinbloom.com
+    port: "80"
+    docroot: "/var/www/familyinbloom.com/www"
+    docroot_owner: www-data
+    docroot_group: www-data
+    serveraliases:
+      - www.familyinbloom.com
+    options:
+      - FollowSymLinks
+      - MultiViews
+    override: "All"
+
+vcsrepos:
+  pdxfixit: # should match the above resource names
+    path: /var/www/pdxfixit.com/www # should match the docroot above
+    source: https://github.com/pdxfixit/website.git
+  familyinbloom:
+    path: /var/www/familyinbloom.com/www
+    source: https://github.com/pdxfixit/familyinbloom.git
+
+databases:
+  familyinbloom_db:
+    user: 'fib_user'
+    password: 'password'
+    host: 'localhost'
+    grant:
+      - 'ALL'
+      - 'SUPER'
