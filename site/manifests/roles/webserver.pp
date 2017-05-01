@@ -8,7 +8,6 @@ class site::roles::webserver (
   # Create vhosts
   create_resources('apache::vhost', $vhosts)
 
-  # Create users
   file { '/var/www':
     ensure => directory,
   }
@@ -21,8 +20,8 @@ class site::roles::webserver (
     purge  => true,
   }
 
-  # create /var/www/<domain>
   $vhosts.each |$k, $v| {
+    # create /var/www/<domain>
     file { "/var/www/${v['servername']}":
       ensure => directory,
       owner  => 'www-data',
@@ -30,8 +29,19 @@ class site::roles::webserver (
       mode   => '0755',
       before => Apache::Vhost[$k], # vhost resource will create /var/www/<domain>/www
     }
+
+    # create a placeholder index.html for each vhost
+    # file { "/var/www/${v['servername']}/www/index.html":
+    #   ensure  => file,
+    #   owner   => 'www-data',
+    #   group   => 'www-data',
+    #   mode    => '0664',
+    #   content => "${v['servername']}\n",
+    #   require => Apache::Vhost[$k],
+    # }
   }
 
+  # Create users
   # users { 'basic': }
 
   class { 'apache':
