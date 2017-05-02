@@ -40,6 +40,13 @@ class site::roles::restore (
         line   => "\tpublic \$password = '${databases["${k}_db"]['password']}';",
         match  => 'public \$password \= \'',
       }
+
+      file_line { "${k}_config_db":
+        ensure => present,
+        path   => "${v['path']}/configuration.php",
+        line   => "\tpublic \$db = '${k}_db';",
+        match  => 'public \$db \= \'',
+      }
     }
   }
 
