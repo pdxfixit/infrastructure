@@ -17,6 +17,30 @@ class site::roles::restore (
       source   => $v['source'],
       before   => Class['::apache']
     }
+
+    # Database config file
+    if $databases["${k}_db"] {
+      file_line { "${k}_config_host":
+        ensure => present,
+        path   => "${v['path']}/configuration.php",
+        line   => "\tpublic \$host = '${databases["${k}_db"]['host']}';",
+        match  => 'public \$host \= \'',
+      }
+
+      file_line { "${k}_config_user":
+        ensure => present,
+        path   => "${v['path']}/configuration.php",
+        line   => "\tpublic \$user = '${databases["${k}_db"]['user']}';",
+        match  => 'public \$user \= \'',
+      }
+
+      file_line { "${k}_config_pass":
+        ensure => present,
+        path   => "${v['path']}/configuration.php",
+        line   => "\tpublic \$password = '${databases["${k}_db"]['password']}';",
+        match  => 'public \$password \= \'',
+      }
+    }
   }
 
   ###########
