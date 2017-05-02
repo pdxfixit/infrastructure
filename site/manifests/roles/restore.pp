@@ -21,31 +21,35 @@ class site::roles::restore (
     # Database config file
     if $databases["${k}_db"] {
       file_line { "${k}_config_host":
-        ensure => present,
-        path   => "${v['path']}/configuration.php",
-        line   => "\tpublic \$host = '${databases["${k}_db"]['host']}';",
-        match  => 'public \$host \= \'',
+        ensure  => present,
+        path    => "${v['path']}/configuration.php",
+        line    => "\tpublic \$host = '${databases["${k}_db"]['host']}';",
+        match   => 'public \$host \= \'',
+        require => Vcsrepo[$k],
       }
 
       file_line { "${k}_config_user":
-        ensure => present,
-        path   => "${v['path']}/configuration.php",
-        line   => "\tpublic \$user = '${databases["${k}_db"]['user']}';",
-        match  => 'public \$user \= \'',
+        ensure  => present,
+        path    => "${v['path']}/configuration.php",
+        line    => "\tpublic \$user = '${databases["${k}_db"]['user']}';",
+        match   => 'public \$user \= \'',
+        require => Vcsrepo[$k],
       }
 
       file_line { "${k}_config_pass":
-        ensure => present,
-        path   => "${v['path']}/configuration.php",
-        line   => "\tpublic \$password = '${databases["${k}_db"]['password']}';",
-        match  => 'public \$password \= \'',
+        ensure  => present,
+        path    => "${v['path']}/configuration.php",
+        line    => "\tpublic \$password = '${databases["${k}_db"]['password']}';",
+        match   => 'public \$password \= \'',
+        require => Vcsrepo[$k],
       }
 
       file_line { "${k}_config_db":
-        ensure => present,
-        path   => "${v['path']}/configuration.php",
-        line   => "\tpublic \$db = '${k}_db';",
-        match  => 'public \$db \= \'',
+        ensure  => present,
+        path    => "${v['path']}/configuration.php",
+        line    => "\tpublic \$db = '${k}_db';",
+        match   => 'public \$db \= \'',
+        require => Vcsrepo[$k],
       }
     }
   }
