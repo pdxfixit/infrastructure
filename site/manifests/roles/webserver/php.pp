@@ -183,16 +183,20 @@ class site::roles::webserver::php (
       php::extension { 'pdo': }
       php::extension { 'gd': }
       php::extension { 'mbstring': }
-      php::extension { 'mysql': }
       php::extension { 'xml': }
     }
-    /^(Debian|Ubuntu)$/: {
-      php::extension { 'mysql': }
-      php::extension { 'gd': }
-      package { 'libpcre3-dev': ensure => 'installed' }
+    'Debian', 'Ubuntu': {
+      case $::lsbdistcodename {
+        'xenial': {
+
+        }
+        default: {
+          php::extension { 'gd': }
+          package { 'libpcre3-dev': ensure => 'installed' }
+        }
+      }
     }
     default: {
-      php::extension { 'mysql': }
       php::extension { 'gd': }
     }
   }
