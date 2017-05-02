@@ -12,6 +12,8 @@ class site::roles::restore (
   $vcsrepos.each |$k, $v| {
     vcsrepo { $k:
       ensure   => present,
+      owner    => 'www-data',
+      group    => 'www-data',
       path     => $v['path'],
       provider => 'git',
       source   => $v['source'],
