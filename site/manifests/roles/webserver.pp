@@ -1,6 +1,6 @@
 # Everything needed to set up a basic web server
 class site::roles::webserver (
-  $vhosts   = {}, # magic hiera lookup
+  $vhosts = {}, # magic hiera lookup
 ) {
 
   anchor { '::site::roles::webserver': }
@@ -28,7 +28,7 @@ class site::roles::webserver (
       owner  => 'www-data',
       group  => 'www-data',
       mode   => '0755',
-      before => Apache::Vhost[$k], # vhost resource will create /var/www/<domain>/www
+      before => Apache::Vhost[$k], # vcsrepo or vhost will create /var/www/<domain>/www
     }
 
     # create a placeholder index.html for each vhost
@@ -76,7 +76,7 @@ class site::roles::webserver (
     owner   => 'root',
     group   => 'root',
     mode    => '0775',
-    content => template('site/comply.sh.erb'), # we're using a template here for consistency; but it's not needed
+    content => template('site/comply.sh.erb'), # we're using a template here for similarity; but it's not needed (this is the only static file)
   }
 
 }

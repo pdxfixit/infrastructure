@@ -32,7 +32,7 @@ php:
   error_reporting: 'E_ALL & ~E_NOTICE'
 
 site::roles::webserver::vhosts:
-  pdxfixit_web_http: # the 'pdxfixit' part here should be reused below.
+  pdxfixit_web_http:
     default_vhost: true
     servername: pdxfixit.com
     port: "80"
@@ -59,7 +59,7 @@ site::roles::webserver::vhosts:
     override: "All"
 
 vcsrepos:
-  pdxfixit: # should match the above resource names
+  pdxfixit:
     path: /var/www/pdxfixit.com/www # should match the docroot above
     source: https://github.com/pdxfixit/website.git
   familyinbloom:

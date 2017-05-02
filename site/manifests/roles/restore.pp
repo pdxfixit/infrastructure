@@ -10,14 +10,12 @@ class site::roles::restore (
   # restore each of the file repos
   # This may break if there's not a matching vhost
   $vcsrepos.each |$k, $v| {
-    if defined(Apache::Vhost["${k}_web_http"]) {
-      vcsrepo { $k:
-        ensure   => present,
-        path     => $v['path'],
-        provider => 'git',
-        source   => $v['source'],
-        before   => Apache::Vhost["${k}_web_http"],
-      }
+    vcsrepo { $k:
+      ensure   => present,
+      path     => $v['path'],
+      provider => 'git',
+      source   => $v['source'],
+      before   => Class['::apache']
     }
   }
 
