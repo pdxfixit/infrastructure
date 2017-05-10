@@ -3,7 +3,6 @@
 class site::roles::base (
   $timezone = 'America/Los_Angeles',
 ) {
-  anchor { '::site::roles::base': }
 
   include ruby
   include ruby::dev

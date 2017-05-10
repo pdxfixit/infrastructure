@@ -3,8 +3,6 @@ class site::roles::webserver (
   $vhosts = {}, # magic hiera lookup
 ) {
 
-  anchor { '::site::roles::webserver': }
-
   # Create vhosts
   create_resources('apache::vhost', $vhosts)
 
