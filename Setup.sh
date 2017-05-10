@@ -3,14 +3,14 @@
 # Puppet manifests must be uploaded to /pdxfixit/infra before running this script.
 
 if [ ! -d "/vagrant" ] ; then
-  hostname "teamnumb.jeffcolo.net"
+  hostname "www.teamnumb.com"
   ENV="production"
   # ensure vhost folders are created
   while read l; do
     if [[ "$l" =~ "docroot:" ]] ; then
       mkdir -p ${l/#docroot: }
     fi
-  done < nodes/teamnumb.jeffcolo.net.yaml
+  done < nodes/www.teamnumb.com.yaml
 else
   hostname "dev.pdxfixit.com"
   ENV="dev"
