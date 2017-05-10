@@ -10,13 +10,15 @@ class site::roles::webserver (
     ensure => directory,
   }
 
-  file { '/var/www/.ssh':
-    ensure => directory,
-    owner  => 'www-data',
-    group  => 'www-data',
-    mode   => '0755',
-    purge  => true,
-    before => Ssh_authorized_key['www-data'],
+  if defined( Ssh_authorized_key['www-data'] ) {
+    file { '/var/www/.ssh':
+      ensure => directory,
+      owner  => 'www-data',
+      group  => 'www-data',
+      mode   => '0755',
+      purge  => true,
+      before => Ssh_authorized_key['www-data'],
+    }
   }
 
   $vhosts.each |$k, $v| {
