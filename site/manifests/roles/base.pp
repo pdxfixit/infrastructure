@@ -12,6 +12,6 @@ class site::roles::base (
   class { '::ntp': }
   class { 'timezone': timezone => $timezone }
 
-  create_resources('ssh_authorized_key', lookup('ssh_authorized_keys', {}))
+#  create_resources('ssh_authorized_key', lookup('ssh_authorized_keys', {}))
 
 }
